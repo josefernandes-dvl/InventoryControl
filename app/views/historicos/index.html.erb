@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center mx-4 my-4">
+  <h1 class="text-primary mb-0">Histórico Geral do Estoque</h1>
+  <%= link_to "Voltar", products_path, class: "btn btn-outline-secondary ms-3" %>
+</div>
+
+<% if @historicos.any? %>
+  <div class="position-relative ms-4 ps-4 border-start border-3 border-primary">
+    <% @historicos.each do |historico| %>
+      <div class="position-relative mb-4">
+
+        <!-- Círculo -->
+        <div
+          class="position-absolute top-50 start-0 translate-middle-y bg-primary border border-white rounded-circle"
+          style="width: 20px; height: 20px; margin-left: -12px;">
+        </div>
+
+        <!-- Linha horizontal curta ligando o círculo à linha azul -->
+        <div class="position-absolute top-50 translate-middle-y bg-primary"
+             style="height: 2px; width: 20px; left: 0; margin-left: -20px;"></div>
+
+        <!-- Conteúdo do histórico -->
+        <div class="bg-light p-3 rounded shadow-sm ms-4">
+          <p class="mb-1">
+            <strong><%= historico.action_type.capitalize %></strong> - Produto: <%= historico.product&.title || historico.product_title || "Produto removido" %>
+          </p>
+          <p class="mb-1">Quantidade: <%= historico.quantity_change %></p>
+          <p class="mb-1">Usuário: <%= historico.user %></p>
+          <p class="mb-1">Data: <%= l(historico.created_at, format: :short) %></p>
+          <p class="mb-0">Nota: <%= truncate(historico.note, length: 100) %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Paginação -->
+  <div class="d-flex justify-content-center mt-4">
+    <%= raw pagy_bootstrap_nav(@pagy, link_extra: 'data-turbo="false"') %>
+  </div>
+<% else %>
+  <p class="text-muted my-4 mx-4">Nenhuma atividade de estoque registrada ainda.</p>
+<% end %>

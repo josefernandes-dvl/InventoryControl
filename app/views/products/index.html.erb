@@ -1,0 +1,64 @@
+<div class="container mt-4">
+
+  <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="text-primary">Supermercado Baleia - Controle de Estoque</h1>
+    <%= link_to new_product_path, class: "btn btn-success" do %>
+      <i class="bi bi-plus-lg"></i> Novo Produto
+    <% end %>
+  </div>
+
+  <!-- Campo de pesquisa com botão Histórico -->
+  <div class="mb-3 d-flex align-items-center" style="max-width: 450px; gap: 10px;">
+    <div class="position-relative flex-grow-1">
+      <input type="text" id="product-search" class="form-control" placeholder="Pesquisar produto...">
+      <ul id="search-results" class="list-group position-absolute w-100" style="display: none; z-index: 1000;"></ul>
+    </div>
+
+    <%= link_to "Histórico", historicos_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Título</th>
+          <th>Preço</th>
+          <th>Descrição</th>
+          <th>Categoria</th>
+          <th>Disponível?</th>
+          <th>Quantidade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.title %></td>
+            <td><%= number_to_currency(product.price, unit: "R$ ") %></td>
+            <td><%= truncate(product.description, length: 50) %></td>
+            <td><%= product.category&.name || "Sem categoria" %></td>
+            <td><%= product.buy ? "Sim" : "Não" %></td>
+            <td><%= product.quantity || 0 %></td>
+            <td>
+              <div class="btn-group" role="group">
+                <%= link_to "Ver", product_path(product), class: "btn btn-outline-primary btn-sm" %>
+                <%= link_to "Editar", edit_product_path(product), class: "btn btn-outline-warning btn-sm" %>
+                <%= button_to "Excluir", product_path(product), method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-outline-danger btn-sm" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= raw pagy_bootstrap_nav(@pagy, link_extra: 'data-turbo="false"') %>
+
+</div>

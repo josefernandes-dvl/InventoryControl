@@ -1,0 +1,58 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Novo Produto</h1>
+
+  <%= form_with(model: @product, local: true) do |form| %>
+    <% if @product.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@product.errors.count, "erro") %> impediram o salvamento:</h4>
+        <ul>
+          <% @product.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :title, "Título", class: "form-label" %>
+      <%= form.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :price, "Preço", class: "form-label" %>
+      <%= form.number_field :price, step: 0.01, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, "Descrição", class: "form-label" %>
+      <%= form.text_area :description, rows: 5, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :category_id, "Selecionar Categoria Existente", class: "form-label" %>
+      <%= form.collection_select :category_id, @categories, :id, :name, { prompt: "Selecione uma categoria" }, { class: "form-select" } %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.fields_for :category do |cat_form| %>
+        <%= cat_form.label :name, "Ou digite nova categoria", class: "form-label" %>
+        <%= cat_form.text_field :name, class: "form-control" %>
+      <% end %>
+    </div>
+
+    <div class="form-check mb-3">
+      <%= form.check_box :buy, class: "form-check-input" %>
+      <%= form.label :buy, "Disponível?", class: "form-check-label" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :quantity, "Quantidade", class: "form-label" %>
+      <%= form.number_field :quantity, class: "form-control", min: 0 %>
+    </div>
+
+    <div>
+      <%= form.submit "Criar Produto", class: "btn btn-success" %>
+      <%= link_to "Cancelar", products_path, class: "btn btn-secondary ms-2" %>
+    </div>
+  <% end %>
+</div>

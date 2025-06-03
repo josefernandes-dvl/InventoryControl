@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0"><%= @product.title %></h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Preço:</strong> <%= number_to_currency(@product.price, unit: "R$ ") %></p>
+      
+      <p><strong>Descrição:</strong></p>
+      <p><%= @product.description %></p>
+
+      <p><strong>Categoria:</strong> 
+        <span class="badge bg-info text-dark">
+          <%= @product.category&.name || "Não informada" %>
+        </span>
+      </p>
+
+      <p><strong>Disponível em Estoque?</strong> 
+        <span class="badge <%= @product.buy ? 'bg-success' : 'bg-danger' %>">
+          <%= @product.buy ? "Sim" : "Não" %>
+        </span>
+      </p>
+
+      <p><strong>Quantidade:</strong> 
+        <% quantidade_classe, texto_alerta, icone_alerta = case @product.quantity
+          when 0...10
+            ["bg-danger", "Crítico", '<i class="bi bi-exclamation-triangle-fill text-danger"></i>'].freeze
+          when 10..20
+            ["bg-warning text-dark", "Atenção", '<i class="bi bi-exclamation-triangle-fill text-warning"></i>'].freeze
+          else
+            ["bg-success", "", ""].freeze
+        end %>
+
+        <span class="badge <%= quantidade_classe %>">
+          <%= @product.quantity %>
+        </span>
+
+        <% if texto_alerta.present? %>
+          <span class="ms-2 align-middle">
+            <%= icone_alerta.html_safe %>
+            <strong class="ms-1"><%= texto_alerta %></strong>
+          </span>
+        <% end %>
+      </p>
+
+    </div>
+    <div class="card-footer text-end">
+      <%= link_to "Editar Produto", edit_product_path(@product), class: "btn btn-warning" %>
+      <%= link_to "Voltar para Lista", products_path, class: "btn btn-secondary ms-2" %>
+    </div>
+  </div>
+</div>
