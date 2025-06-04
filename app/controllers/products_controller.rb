@@ -52,7 +52,7 @@ class ProductsController < ApplicationController
         )
       end
 
-      redirect_to @product, notice: "Produto atualizado com sucesso."
+      redirect_to @product, notice: "Produto atualizado com sucesso. "
     else
       render :edit
     end
